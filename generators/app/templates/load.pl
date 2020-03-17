@@ -4,7 +4,7 @@
     directory_file_path(Dir, sources, SourcePath),
     asserta(user:file_search_path(source, SourcePath)),
     directory_file_path(Dir, assets, AssetsPath),
-    asserta(user:file_search_path(asset, SourcePath)).
+    asserta(user:file_search_path(asset, AssetsPath)).
 
 :- use_module(library(settings)).
 

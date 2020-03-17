@@ -1,6 +1,6 @@
-:- module(<%=module%>, []).
-%! <module> Ontology Parser of YAML specifications
-%  Predicates and phrases for parsing YAML into ANSI thesaurus specification
+:- module(<%=moduleName%>, []).
+%! <module> <%=moduleName%> doing some cool things
+%  Predicates for <%=moduleName%> ...
 
 % :- use_module(library(module)).
 

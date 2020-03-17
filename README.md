@@ -29,6 +29,10 @@ Later you can use module generator to add additional modules to your project
 you swipl:module some_module
 ```
 
+This will create new prolog module in the current director - unless you are in
+the root directory, in the such case it creates the module in `sources` directory - 
+and updates the `load.pl` accordingly. 
+
 ## Details
 
 The project structure is based on common recommendations of structuring the prolog project.
