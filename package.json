@@ -1,0 +1,25 @@
+{
+  "name": "generator-swipl",
+  "version": "1.0.0",
+  "description": "Scaffolds SWI Prolog regular structure. ",
+  "main": "index.js",
+  "scripts": {},
+  "files": [
+    "generators"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://milung.visualstudio.com/DefaultCollection/Logic%20Programming/_git/generator-swipl-project"
+  },
+  "keywords": [
+    "yeoman-generator",
+    "swipl",
+    "prolog"
+  ],
+  "author": "milan.unger@siemens-healthineers.com",
+  "license": "ISC",
+  "dependencies": {
+    "generator-generator": "^4.0.2",
+    "yeoman-generator": "^4.7.2"
+  }
+}
