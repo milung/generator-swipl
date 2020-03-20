@@ -3,6 +3,8 @@
     ]).
 :- use_module(library(http/html_write), [reply_html_page/2]).
 
+:- encoding(utf8).
+
 %%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 main(_Argv) :-

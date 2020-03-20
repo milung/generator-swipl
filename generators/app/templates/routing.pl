@@ -2,7 +2,10 @@
 %! <module> HTTP routing 
 %  Predicates for basic routing of http requests
 
+:- encoding(utf8).
+
 :- use_module(library(http/http_dispatch)).
+:- use_module(library(http/html_write)).
 :- use_module(project(server), [serve_assets/1]).
 
 :- multifile 

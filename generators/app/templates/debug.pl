@@ -7,3 +7,5 @@
 
 :- load_settings('app.settings.pl', [undefined(load)]).
 :- load_settings('debug.settings.pl', [undefined(load)]).
+
+:- load_test_files([]).

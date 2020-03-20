@@ -15,16 +15,17 @@ module.exports = class extends Generator {
     if ( this.destinationPath('sources') !== this.contextRoot &&  this.destinationPath() !== this.contextRoot ) {
       relativePath = path.relative(this.destinationPath('sources'), this.contextRoot) + '/';
     }
-    
-    const sourceFiles = [ 
-        'module.pl'
+    const modulePath = relativePath + this.options.moduleName;
+    const moduleFiles = [ 
+        '.pl',
+        '.plt'
     ];
 
-    sourceFiles.map( source => 
-    this.fs.copyTpl(
-        this.templatePath(source),
-        this.destinationPath('sources/' + relativePath + this.options.moduleName + '.pl'),
-        { 'moduleName': this.options.moduleName }
+    moduleFiles.map( extension => 
+      this.fs.copyTpl(
+        this.templatePath('module' + extension),
+        this.destinationPath('sources/' + modulePath + extension),
+        { 'moduleName': this.options.moduleName, modulePath }
     ));
 
 
@@ -41,7 +42,7 @@ module.exports = class extends Generator {
     if(index) {
         const update 
             = loader.substring(0, index)
-            + '\r\n:- use_module(source(' + relativePath + this.options.moduleName + ')).'
+            + '\r\n:- use_module(source(' + modulePath + ')).'
             + loader.substring(index);
 
         this.fs.write(this.destinationPath('load.pl'), update);
