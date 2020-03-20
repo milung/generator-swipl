@@ -6,6 +6,8 @@
     directory_file_path(Dir, assets, AssetsPath),
     asserta(user:file_search_path(asset, AssetsPath)).
 
+:- set_prolog_flag(encoding, utf8).
+
 :- use_module(library(settings)).
 
 :- use_module(server).

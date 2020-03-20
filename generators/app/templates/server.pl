@@ -78,8 +78,10 @@ server_start_and_wait :-
 %! server_start is det
 %  Prints current server settings and  starts the server
 server_start :- 
-    writeln('<%=applicationName%>,  v.0.1.0'),
-    writeln(''),
+    setting(user:app_name, AppName),
+    setting(user:app_version, Version),
+    setting(user:app_authority, Authority),
+    format('~n, version ~w, by ~w', [AppName, Version, Authority]), nl, nl,
     list_settings(server), 
     server_start_and_wait.
 

@@ -8,8 +8,10 @@
 
 % :- use_module(source(module)).
 
+%%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % %! predicate is det
 % %  Lorem ipsum dolores
-% prdicate :- true.
-
-%%%%%% PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%
+% predicate :- !.
+    
+%%% PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%

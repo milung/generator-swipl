@@ -1,16 +1,16 @@
 :- module(main, [
-    main/1
+    main/4
     ]).
-:- use_module(library(http/html_write), [reply_html_page/2]).
+%! <module> Main entry for COmmand Line Interface
+%  Contains the main entry and other supportive predicates
 
-:- encoding(utf8).
+% :- use_module(library(...)).
+
+% :- use_module(source(...)).
 
 %%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-main(_Argv) :-
-    hello_world_cli.
+main(_PositionalArgs, _CliOptions, _InputStream, OutputStream) :-
+    write(OutputStream, 'Hello Worlds'), nl(OutputStream).
 
-%%%  PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%        
-
-hello_world_cli :-
-    writeln('Hello world').
+%%%  PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%    

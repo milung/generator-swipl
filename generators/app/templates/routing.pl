@@ -20,8 +20,10 @@
 :- http_handler(root('assets'), serve_assets, [prefix]).
 :- http_handler(root('favicon.ico'), http_reply_file(assets('favicon.ico'), []), []).
 :- http_handler(root(.), hello_world_handler, []).
+    
+%%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%% PRIVATE SECTION %%%%%%%%%%%%%
+%%%  PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%
 
 %! hello_world_handler(+Request:list) is det
 %  http server handler to reply with hello world page 
