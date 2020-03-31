@@ -18,6 +18,12 @@
 :- dynamic   
     http:location/3.
 
+% log warning and error debug messages
+:- debug(warning).
+:- debug(warning(_)).
+:- debug(error).
+:- debug(error(_)).
+
 % setting for changing the server port by usage of environment variables
 :- setting(port, number, env(http_port, 80), 'HTTP port the server is listening on. (ENV http_port)').
 

@@ -14,12 +14,19 @@ module.exports = class extends Generator {
             name: "name",
             message: "Your project name",
             default: this.appname // Default to current folder name
+          },
+          {
+            type: "input",
+            name: "command",
+            message: "Name of CLI command to execute your program",
+            default: this.appname // Default to current folder name
           }
         ]);
       }
 
       configuring() {
           this.config.set('applicationName', this.answers.name);
+          this.config.set('commandName', this.answers.command);
       }
 
       writing() {
@@ -30,15 +37,27 @@ module.exports = class extends Generator {
             'load.pl',
             'run.pl' ,
             'server.pl',
-            'start.pl'
+            'start.pl',
+            'docker-build.ps1'
         ];
 
         rootFiles.map( template => 
         this.fs.copyTpl(
             this.templatePath(template),
             this.destinationPath(template),
-            { 'applicationName': this.answers.name }
+            { 
+              'applicationName': this.answers.name,
+              'commandName': this.answers.command
+            }
         ));
+
+        this.fs.copyTpl(
+          this.templatePath('command.ps1'),
+          this.destinationPath(his.answers.command + '.ps1'),
+          { 
+            'applicationName': this.answers.name,
+            'commandName': this.answers.command
+          });
 
         const sourceFiles = [ 
             'main.pl',

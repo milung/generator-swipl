@@ -8,7 +8,7 @@ ENV base_url ''
 
 WORKDIR /build
 
-RUN swipl -o bootfile -O -c run.pl
+RUN swipl -o bootfile -c run.pl
 
 FROM swipl
 
@@ -17,6 +17,6 @@ COPY --from=saved-state /build/bootfile /app/bootfile
 
 WORKDIR /app
 
-ENTRYPOINT ["swipl", "-x", "bootfile"]
+ENTRYPOINT ["swipl", "-x", "/app/bootfile"]
 
 CMD ["--server"]

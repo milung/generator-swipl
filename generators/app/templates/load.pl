@@ -10,6 +10,16 @@
 
 :- use_module(library(settings)).
 
+:- use_module(library(debug)).
+% debugging is enabled for info, warnig, and error levels 
+% - use debug and trace for more glanular levels
+:- debug(info).
+:- debug(info(_)).
+:- debug(warning).
+:- debug(error).
+:- debug(warning(_)).
+:- debug(error(_)).
+
 :- use_module(server).
 :- use_module(source(routing)).
 :- use_module(source(main)).
