@@ -16,7 +16,9 @@ COPY --from=saved-state /build/assets /app/assets/
 COPY --from=saved-state /build/bootfile /app/bootfile
 
 WORKDIR /app
-
+# for cli mode you may need to set folowing workdir 
+# WORKDIR /app/workdir
 ENTRYPOINT ["swipl", "-x", "/app/bootfile"]
 
+# remove if only cli is requested
 CMD ["--server"]

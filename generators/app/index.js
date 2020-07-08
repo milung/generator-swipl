@@ -18,8 +18,14 @@ module.exports = class extends Generator {
           {
             type: "input",
             name: "command",
-            message: "Name of CLI command to execute your program",
+            message: "Name of docker image and of CLI command to execute your program",
             default: this.appname // Default to current folder name
+          },
+          {
+            type: "input",
+            name: "registry",
+            message: "Docker registry for the generated image",
+            store: true
           }
         ]);
       }
@@ -27,12 +33,15 @@ module.exports = class extends Generator {
       configuring() {
           this.config.set('applicationName', this.answers.name);
           this.config.set('commandName', this.answers.command);
+          this.config.set('registry', this.answers.registry);
       }
 
       writing() {
         const rootFiles = [ 
+            'azure-pipelines.yml',
             'debug.pl',
             'dev.settings.pl',
+            'README.md',
             'Dockerfile',
             'load.pl',
             'run.pl' ,
@@ -47,7 +56,8 @@ module.exports = class extends Generator {
             this.destinationPath(template),
             { 
               'applicationName': this.answers.name,
-              'commandName': this.answers.command
+              'commandName': this.answers.command,
+              'registry': this.answers.registry
             }
         ));
 
@@ -56,7 +66,8 @@ module.exports = class extends Generator {
           this.destinationPath(his.answers.command + '.ps1'),
           { 
             'applicationName': this.answers.name,
-            'commandName': this.answers.command
+            'commandName': this.answers.command,
+            'registry': this.answers.registry
           });
 
         const sourceFiles = [ 

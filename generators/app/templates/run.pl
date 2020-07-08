@@ -34,7 +34,7 @@ write_banner :-
 cli_option(help, boolean, [], 'prints usage help').
 cli_option(input, atom, [], 'the input file to process; if not specified then the current intput is used').
 cli_option(output, atom, [], 'the output file where result is written; if not specified then the current output is used').
-cli_option(server, atom, [], 'invokes built in HTTP server').
+cli_option(server, boolean, [], 'invokes built in HTTP server').
 
 cli_options( OptionsSpec):-
     findall(cli_option(Opt, Type, Spec, Help), cli_option(Opt, Type, Spec, Help), Options),

@@ -1,1 +1,1 @@
-docker run --rm -it -v ${PWD}:/app/workdir <%=commandName%> -- $args
+docker run --rm -it -v ${PWD}:/app/workdir <%=registry%>/<%=commandName%> -- $args

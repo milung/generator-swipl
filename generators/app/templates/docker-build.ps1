@@ -1,1 +1,1 @@
-docker build -t <%=commandName%>:latest .
+docker build -t <%=registry%>/<%=commandName%>:latest .
