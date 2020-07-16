@@ -15,19 +15,10 @@
     %  overriden by by entry in OptionSpec. Help can be atom or list (of lines). 
     cli_option/4.
 
-:- setting(app_version, atom, env(app_version, '0.1.0'), 'version of the system (ENV app_version)').
-:- setting(app_name, atom, env(app_name, '<%=applicationName%>'), 'version of the system (ENV app_name)').
-:- setting(app_authority, atom, env(app_authority, 'unknown'), 'version of the system (ENV app_name)').
 
 :- initialization(server_or_main, main).
 %%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-write_banner :-
-    setting(app_name, AppName),
-    setting(app_version, Version),
-    setting(app_authority, Authority),
-    format('~w, version ~w, by ~w', [AppName, Version, Authority]), 
-    nl, nl.
 
 %%%  PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%
 

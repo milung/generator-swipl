@@ -10,6 +10,10 @@
 
 :- use_module(library(settings)).
 
+:- setting(app_version, atom, env(app_version, '0.1.0'), 'version of the system (ENV app_version)').
+:- setting(app_name, atom, env(app_name, 'OntologyCLI'), 'version of the system (ENV app_name)').
+:- setting(app_authority, atom, env(app_authority, 'unknown'), 'version of the system (ENV app_name)').
+
 :- use_module(library(debug)).
 % debugging is enabled for info, warnig, and error levels 
 % - use debug and trace for more glanular levels

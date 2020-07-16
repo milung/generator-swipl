@@ -8,6 +8,9 @@ ENV base_url ''
 
 WORKDIR /build
 
+# install custom packages, e.g. 
+# RUN swipl -g  "pack_install(prolog_sax, [interactive(false), upgrade(true), url('https://github.com/milung/prolog_sax/archive/v1.0.3.zip'), inquiry(false)])" -t halt
+
 RUN swipl -o bootfile -c run.pl
 
 FROM swipl

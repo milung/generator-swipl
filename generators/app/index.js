@@ -43,6 +43,8 @@ module.exports = class extends Generator {
             'dev.settings.pl',
             'README.md',
             'Dockerfile',
+            "init.pl",
+            "common.pl",
             'load.pl',
             'run.pl' ,
             'server.pl',
@@ -63,7 +65,7 @@ module.exports = class extends Generator {
 
         this.fs.copyTpl(
           this.templatePath('command.ps1'),
-          this.destinationPath(his.answers.command + '.ps1'),
+          this.destinationPath(this.answers.command + '.ps1'),
           { 
             'applicationName': this.answers.name,
             'commandName': this.answers.command,
