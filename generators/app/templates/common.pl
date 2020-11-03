@@ -3,14 +3,17 @@
     ]).
 %! <module> Common utility functions for executing the project
 
+:- multifile prolog:message//1.
 
 %%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-write_banner :-
-    setting(user:app_name, AppName),
-    setting(user:app_version, Version),
-    setting(user:app_authority, Authority),
-    format('~w, version ~w, by ~w', [AppName, Version, Authority]), 
-    nl, nl.
 
 %%%  PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%    
+
+prolog:message(program_version) -->
+    {
+        setting(app_name, AppName),
+        setting(app_version, Version),
+        setting(app_authority, Authority)
+    },
+    [AppName, ' version ', Version, ' by ',  Authority].

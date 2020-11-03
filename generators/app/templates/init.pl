@@ -8,3 +8,7 @@
     asserta(user:file_search_path(asset, AssetsPath)).
 
 :- set_prolog_flag(encoding, utf8).
+
+:-      current_prolog_flag(gui, true)
+    ->  guitracer
+    ;   true.

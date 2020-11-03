@@ -11,7 +11,7 @@
 %%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 main(_PositionalArgs, _CliOptions, _InputStream, OutputStream) :-
-    common:write_banner,
+    print_message(banner, program_version),
     write(OutputStream, 'Hello Worlds'), nl(OutputStream).
 
 %%%  PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%    
