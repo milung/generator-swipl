@@ -46,6 +46,7 @@ module.exports = class extends Generator {
             "init.pl",
             "common.pl",
             'load.pl',
+            'packages.pl',
             'run.pl' ,
             'server.pl',
             'start.pl',

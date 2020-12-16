@@ -1,1 +1,4 @@
+.packages
+**/config.user.env
 user.settings.pl
+out
