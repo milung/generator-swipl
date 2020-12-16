@@ -55,6 +55,9 @@ The docker image is optimized, based on the saved state of your program. If run 
 it invokes the http server, any arguments passed to `docker run your-swipl-image` will lead to
 invokation of command line interface.
 
+The project allows for simple package management, specify external packages in the `packages.pl`. They will be
+automatically installed into `.packages` folder and attached to the library search.
+
 ## Next steps
 
 Created based on my needs, new features may come, but not guaranteed.
