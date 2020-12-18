@@ -33,7 +33,9 @@ This will create new prolog module in the current director - unless you are in
 the root directory, in the such case it creates the module in `sources` directory -
 and updates the `load.pl` accordingly.
 
-## Details
+## Generators
+
+### yo swipl
 
 The project structure is based on common recommendations of structuring the prolog project.
 Typically you do not need to touch files in the root directory, rather place your modules into
@@ -58,6 +60,13 @@ invokation of command line interface.
 The project allows for simple package management, specify external packages in the `packages.pl`. They will be
 automatically installed into `.packages` folder and attached to the library search.
 
+## yo swipl:package
+
+Generates minimal swipl package structure with basic testing and debuging support
+
+## yo swipl:module
+
+Generates new prolog  module file with corresponding prolog unit tests file and registers it into `load.pl` script.
 ## Next steps
 
 Created based on my needs, new features may come, but not guaranteed.
