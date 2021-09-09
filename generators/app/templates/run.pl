@@ -4,104 +4,20 @@
 %  instead update server.pl if necessary
 %
 :- [load].
+:- use_module(library(execution_cli)).
+:- use_module(library(apply)).  
 
-:- use_module(source(main)).
-:- use_module(project(server)).
+:- initialization( execute, main).
 
-:- multifile
-    %! cli_option(+OptionKey:atom, +Type:atom, +OptionSpec:list(term), +Help)
-    %  Multifile hook into CLI to declare option spec for opt_parse module.
-    %  shortflags and longflags are automatically derived from the OptionKey if not
-    %  overriden by by entry in OptionSpec. Help can be atom or list (of lines). 
-    cli_option/4.
-
-
-:- initialization(server_or_main, main).
 %%% PUBLIC PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%%%  PRIVATE PREDICATES %%%%%%%%%%%%%%%%%%%%%%%%%
-
-cli_option(help, boolean, [], 'prints usage help').
-cli_option(input, atom, [], 'the input file to process; if not specified then the current intput is used').
-cli_option(output, atom, [], 'the output file where result is written; if not specified then the current output is used').
-cli_option(server, boolean, [], 'invokes built in HTTP server').
-
-cli_options( OptionsSpec):-
-    findall(cli_option(Opt, Type, Spec, Help), cli_option(Opt, Type, Spec, Help), Options),
-    options_specs(Options, OptionsSpec).
-
-input_stream(Options, RestOptions, Stream) :-
-    select_option( input(File), Options, RestOptions ),
-    nonvar(File),
-    open(File, read, Stream).
-input_stream(Options, Options, user_input).
-
-main(Argvs) :-
-    cli_options(OptionsSpec), 
-    opt_parse(OptionsSpec, Argvs, OptionsParse, Positional, []),  
-    options_remove_free(OptionsParse, Options),
-    (
-        print_help(Options, OptionsSpec),
-        !
-    ;
-        input_stream(Options, Options1, Input), 
-        output_stream(Options1, RestOptions, Output), 
-        main(Positional, RestOptions, Input, Output),
-        close(Input),
-        close(Output)
-    ).
-
-options_remove_free( [Option | OptionsParse], [Option | Options]) :-
-    Option =.. [_, Arg],
-    nonvar(Arg),
-    options_remove_free( OptionsParse,  Options).
-options_remove_free( [Option | OptionsParse], Options)  :-
-    Option =.. [_, Arg],
-    var(Arg),
-    options_remove_free( OptionsParse,  Options).
-options_remove_free( [], []).
-
-option_spec(
-    cli_option(Key, Type, Options, Help), 
-    [opt(Key), type(Type), help(HelpList), longflags(LongFlags), shortflags(ShortFlags) |Spec]) :-
-    (
-        is_list(Help),
-        HelpList = Help
-    ;
-        \+ is_list(Help),
-        HelpList = [ Help ]        
-    ),
-    select_option(longflags(LongFlags), Options, Spec0, [Key] ),
-    atom_chars(Key, [ Short | _]),
-    select_option(shortflags(ShortFlags), Spec0, Spec,  [ Short ]),
-    !.    
-    
-options_specs([Option | Options], [Spec|Specs]) :-
-    option_spec(Option, Spec),
-    options_specs(Options, Specs).
-options_specs([], []).
-
-output_stream(Options, RestOptions, Stream) :-
-    select_option(output(File), Options, RestOptions ),
-    open(File, write, Stream).
-output_stream(Options, Options, user_output).
-
-print_help(Options, OptionsSpec) :-
-    memberchk(help(true), Options),
-    opt_help(OptionsSpec, Help),
-    write_banner, nl,
-    main:usage(Usage),
-    format('Usage: ~w', [Usage]), nl,
-    writeln(Help).
-
-server_or_main :-
-    current_prolog_flag(argv, Argv), 
-    argv_options(Argv, _, Options),
-    (
-        option(server(true), Options),
-        !,
-        server:server_start
-    ;
-        main
-    ).
+execute :- 
+   current_prolog_flag(environment, production)
+   -> (  execute_cli
+      -> print_message(informational, format('Command succeeded', [])),
+         halt(0)
+      ;  print_message(error, format('Command failed', [])),
+         halt(1)
+      ) 
+   ;  true.
+   

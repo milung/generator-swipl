@@ -2,12 +2,37 @@
 
 
 %  Project load search paths
-:-  prolog_load_context(directory, Dir), 
-    asserta(user:file_search_path(project, Dir)),
-    directory_file_path(Dir, sources, SourcePath),
-    asserta(user:file_search_path(source, SourcePath)),
-    directory_file_path(Dir, assets, AssetsPath),
-    asserta(user:file_search_path(asset, AssetsPath)).
+:-  asserta(user:file_search_path(cliroot, project('.'))).
+
+:- initialization(
+    (     
+        retractall(file_search_path(cliroot, _)),  
+        retractall(file_search_path(project, _)),
+        retractall(file_search_path(foreign, _)),
+        current_prolog_flag(executable, ExePath),
+        atomic_list_concat(Segments, '\\', ExePath),
+        atomic_list_concat(Segments, '/', PosixPath),        
+        directory_file_path(Dir, _, PosixPath),
+        (
+            directory_file_path(CliRoot, bin, Dir)
+        ->  true
+        ;   CliRoot = Dir
+        ),        
+        assert(user:file_search_path(cliroot, CliRoot)),
+        assert(user:file_search_path(project, cliroot('.')))
+    ),
+    restore_state).
+
+user:file_search_path(asset, assets).
+user:file_search_path(asset, cliroot(assets)).
+user:file_search_path(html, asset(html)).
+user:file_search_path(user_home, HomeDir) :- getenv('USERPROFILE', HomeDir).
+user:file_search_path(user_home, HomeDir) :- getenv('HOME', HomeDir).
+user:file_search_path(config, '.').
+user:file_search_path(config, './config').
+user:file_search_path(config, user_home('.document-structure')).
+user:file_search_path(config, cliroot(config)).
+user:file_search_path(foreign, cliroot(bin)).
 
 :- set_prolog_flag(encoding, utf8).
 
@@ -28,18 +53,11 @@ install_package(package(Name, _)) :-
     pack_install(Name, [url(Url), package_directory(PackageDir), interactive(false)]).
 
 :-  absolute_file_name(project('.packages'), PackageDir),
+    attach_packs(PackageDir),
     make_directory_path(PackageDir),
     read_file_to_terms(project('packages.pl'), Dependencies, []),
     maplist(install_package, Dependencies),
     attach_packs(PackageDir).
-
-%  Standard settings
-:- setting(app_version, atom, env(app_version, '0.1.0'), 'version of the system (ENV app_version)').
-:- setting(app_name, atom, env(app_name, 'OntologyCLI'), 'version of the system (ENV app_name)').
-:- setting(app_authority, atom, env(app_authority, 'unknown'), 'version of the system (ENV app_name)').
-
-
-
 
 % debugging is enabled for info, warnig, and error levels 
 % - use debug and trace for more glanular levels
@@ -51,6 +69,5 @@ install_package(package(Name, _)) :-
 :- debug(error(_)).
 
 % bootstrap the execution
-:- use_module(server).
+:- use_module(source(server)).
 :- use_module(source(routing)).
-:- use_module(source(main)).

@@ -5,10 +5,13 @@
 ]).
 %! <module> HTTP server hooks
 % Predicates for creating and running http server.
-
+:- use_module(library(execution_context)).
+:- use_module(library(openapi)).
+:- use_module(library(swagger_ui)).
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/html_write)).
+:- use_module(source(api/api)). % api implementation is assumed to export all operations for openapi package serving
 
 :- multifile 
     user:file_search_path/2,
@@ -24,27 +27,36 @@
 :- debug(error).
 :- debug(error(_)).
 
-% setting for changing the server port by usage of environment variables
-:- setting(port, number, env(http_port, 80), 'HTTP port the server is listening on. (ENV http_port)').
-
-% enables to change base_url - usefull for  links where relative address is of no help (e.g. SPA web applications)
-:- setting(server_base_url, atom, env(base_url, '/'), 'Base URL of the server, all absolute links are prefixed with this address (ENV base_url)').
+:- context_variable(port, number, [
+    env('HTTP_PORT'), default(80), 
+    describe('HTTP port the server is listening on.')]).
+:- context_variable(server_base_url, atom,
+    [env('BASE_URL'), default('/'), 
+     describe('Base URL of the server, all absolute links are prefixed with this address')]).
 
 % all assets are served with http_reply_file/2
 user:file_search_path(assets, './assets').
 
+%%% PUBLIC PREDICATES_SECTION %%%%%%%%%%%%%%
+
 %! server is det
 %  Starts http server listening at the default port specified by the server:port settings. 
 server :-     
-    setting(port, Port),
+    context_variable_value(port, Port),
     server(Port).
 
 %! server(+Port:number) is det
 %  Starts http server listening at the port specified by the argument Port. 
 server(Port) :- 
-    http_server(http_dispatch, [port(Port)]).
+    http_server(dispatch, [port(Port)]).
 
-%%% PRIVATE PREDICTES_SECTION %%%%%%%%%%%%%%
+%%% PRIVATE PREDICATES_SECTION %%%%%%%%%%%%%%
+
+dispatch(Request) :-
+    openapi_dispatch(Request),
+    !.
+dispatch(Request) :-
+    http_dispatch(Request).
 
 http:status_page(not_found(URL), _Context, HTML) :-
     phrase(
@@ -63,7 +75,7 @@ is_server_dead(Port) :-
 % if asset does not exists
 serve_assets( Request) :-
     option(path_info(Asset), Request),
-    absolute_file_name(assets(Asset), Absolute),
+    absolute_file_name(html(Asset), Absolute),
     exists_file(Absolute),    
     access_file(Absolute, read),
     http_reply_file(assets(Asset), [], Request).
@@ -75,10 +87,10 @@ serve_assets(Request) :-
 %  Starts the http server listening at the port specified by the server:port setting and wait
 %  indefinetely untiol is_server_dead/1 is not succeded. 
 server_start_and_wait :-
-    setting(port, Port),
+    context_variable_value(port, Port),
     server(Port),
     repeat,
-    sleep(3),
+    sleep(10),
     \+ is_server_dead(Port).
 
 %! server_start is det
@@ -87,8 +99,8 @@ server_start :-
     setting(user:app_name, AppName),
     setting(user:app_version, Version),
     setting(user:app_authority, Authority),
-    format('~n, version ~w, by ~w', [AppName, Version, Authority]), nl, nl,
-    list_settings(server), 
+    format('~n, version ~w, by ~w', [AppName, Version, Authority]), nl, nl, 
     server_start_and_wait.
 
 
+:- openapi_server('./assets/openapi.yaml', []).

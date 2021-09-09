@@ -2,12 +2,12 @@
 
 :-  prolog_load_context(directory, Dir), 
     asserta(user:file_search_path(project, Dir)),
-    directory_file_path(Dir, sources, SourcePath),
-    asserta(user:file_search_path(source, SourcePath)),
-    directory_file_path(Dir, assets, AssetsPath),
-    asserta(user:file_search_path(asset, AssetsPath)).
+    asserta(user:file_search_path(source, project(sources))).    
 
-:- set_prolog_flag(encoding, utf8).
+:- set_prolog_flag(encoding, utf8),
+   set_prolog_flag(stack_limit, 4294967296).
+
+:- attach_packs('.packages').
 
 :-      current_prolog_flag(gui, true)
     ->  guitracer

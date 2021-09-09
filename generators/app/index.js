@@ -40,16 +40,14 @@ module.exports = class extends Generator {
         const rootFiles = [ 
             'azure-pipelines.yml',
             'debug.pl',
-            'dev.settings.pl',
             'README.md',
             'Dockerfile',
             "init.pl",
-            "common.pl",
             'load.pl',
             'packages.pl',
             'run.pl' ,
-            'server.pl',
-            'start.pl',
+            
+            'link.pl',
             'docker-build.ps1'
         ];
 
@@ -74,8 +72,10 @@ module.exports = class extends Generator {
           });
 
         const sourceFiles = [ 
-            'main.pl',
-            'routing.pl'
+            'routing.pl',
+            'server.pl',
+            'api/api.pl',
+            'api/api.plt'
         ];
 
         sourceFiles.map( source => 
@@ -86,12 +86,23 @@ module.exports = class extends Generator {
         ));
 
         const assetFiles = [ 
-            'favicon.ico'
+            'favicon.ico',
+            'openapi.yaml'
         ];
         assetFiles.map( asset => 
         this.fs.copy(
             this.templatePath('assets/' + asset),
             this.destinationPath('assets/' + asset)
         ));
+
+        const configFiles = [ 
+          'config.env',
+          'config.user.env'
+      ];
+      configFiles.map( asset => 
+      this.fs.copy(
+          this.templatePath('config/' + asset),
+          this.destinationPath('config/' + asset)
+      ));
       }
 };
