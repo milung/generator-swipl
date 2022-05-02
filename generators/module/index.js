@@ -6,11 +6,23 @@ module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.argument("moduleName", { type: String, required: true, desc: 'name of the module' });    
+    this.argument("moduleName", { type: String, required: true, desc: 'name of the module' });   
+    const destination = this.findDestinationParent(this.destinationRoot()) ;
+    this.destinationRoot(destination);
+    
   } 
   
+  findDestinationParent(current) {
+    const storage = path.join(current, '.yo-rc.json');
+    if( this.fs.exists(storage)) return current;
+    else {
+      const parent =  path.dirname(current);
+      if(parent == current) return this.contextRoot
+      else return this.findDestinationParent(parent);
+    }
+  }
+  
   writing() {        
-
     var relativePath = '';
     if ( this.destinationPath('sources') !== this.contextRoot &&  this.destinationPath() !== this.contextRoot ) {
       relativePath = path.relative(this.destinationPath('sources'), this.contextRoot) + '/';
@@ -20,6 +32,8 @@ module.exports = class extends Generator {
         '.pl',
         '.plt'
     ];
+    console.log("RELATIVE path: %s, module path: %s, destination: %s, ctx: %s ",
+     relativePath,  this.findDestinationParent(this.destinationRoot()), this.destinationRoot(),this.contextRoot)
 
     moduleFiles.map( extension => 
       this.fs.copyTpl(
