@@ -32,9 +32,7 @@ module.exports = class extends Generator {
         '.pl',
         '.plt'
     ];
-    console.log("RELATIVE path: %s, module path: %s, destination: %s, ctx: %s ",
-     relativePath,  this.findDestinationParent(this.destinationRoot()), this.destinationRoot(),this.contextRoot)
-
+    
     moduleFiles.map( extension => 
       this.fs.copyTpl(
         this.templatePath('module' + extension),
